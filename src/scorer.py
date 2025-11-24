@@ -105,13 +105,10 @@ def evaluate_strategy(
         recalls.append(recall)
         precisions.append(precision)
         f1s.append(f1)
-        per.append({
-            "question": question,
-            "recall": recall,
-            "precision": precision,
-            "f1": f1
-        })
-    
+        per.append(
+            {"question": question, "recall": recall, "precision": precision, "f1": f1}
+        )
+
     metrics = {
         "avg_recall": sum(recalls) / len(recalls) if recalls else 0.0,
         "avg_precision": sum(precisions) / len(precisions) if precisions else 0.0,

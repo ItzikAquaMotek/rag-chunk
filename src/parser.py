@@ -6,7 +6,9 @@ from pathlib import Path
 def read_markdown_folder(folder: str) -> list:
     """Return list of (path, text) for all .md and .txt files in folder (non-recursive)."""
     p = Path(folder)
-    files = [f for f in p.iterdir() if f.is_file() and f.suffix.lower() in [".md", ".txt"]]
+    files = [
+        f for f in p.iterdir() if f.is_file() and f.suffix.lower() in [".md", ".txt"]
+    ]
     result = []
     for f in files:
         try:

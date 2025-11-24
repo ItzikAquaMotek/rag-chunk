@@ -169,11 +169,11 @@ def recursive_character_chunks(
                 "tiktoken is required for token-based chunking. "
                 "Install with: pip install rag-chunk[tiktoken]"
             )
-        import tiktoken
-
         enc = tiktoken.encoding_for_model(model)
         splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-            encoding_name=enc.name, chunk_size=chunk_size, chunk_overlap=overlap
+            encoding_name=enc.name,
+            chunk_size=chunk_size,
+            chunk_overlap=overlap,
         )
     else:
         splitter = RecursiveCharacterTextSplitter(
@@ -190,35 +190,35 @@ def recursive_character_chunks(
 STRATEGIES = {
     "fixed-size": (
         lambda text, chunk_size=200, overlap=0, use_tiktoken=False, model="gpt-3.5-turbo":
-        fixed_size_chunks(
-            text,
-            chunk_size,
-            use_tiktoken=use_tiktoken,
-            model=model
-        )
+            fixed_size_chunks(
+                text,
+                chunk_size,
+                use_tiktoken=use_tiktoken,
+                model=model,
+            )
     ),
     "sliding-window": (
         lambda text, chunk_size=200, overlap=50, use_tiktoken=False, model="gpt-3.5-turbo":
-        sliding_window_chunks(
-            text,
-            chunk_size,
-            overlap,
-            use_tiktoken=use_tiktoken,
-            model=model
-        )
+            sliding_window_chunks(
+                text,
+                chunk_size,
+                overlap,
+                use_tiktoken=use_tiktoken,
+                model=model,
+            )
     ),
     "paragraph": (
         lambda text, chunk_size=0, overlap=0, use_tiktoken=False, model="gpt-3.5-turbo":
-        paragraph_chunks(text)
+            paragraph_chunks(text)
     ),
     "recursive-character": (
         lambda text, chunk_size=200, overlap=50, use_tiktoken=False, model="gpt-3.5-turbo":
-        recursive_character_chunks(
-            text,
-            chunk_size,
-            overlap,
-            use_tiktoken=use_tiktoken,
-            model=model
-        )
+            recursive_character_chunks(
+                text,
+                chunk_size,
+                overlap,
+                use_tiktoken=use_tiktoken,
+                model=model,
+            )
     ),
 }
