@@ -10,6 +10,14 @@ except ImportError:
     TIKTOKEN_AVAILABLE = False
     tiktoken = None
 
+try:
+    from langchain_text_splitters import RecursiveCharacterTextSplitter
+
+    LANGCHAIN_AVAILABLE = True
+except ImportError:
+    LANGCHAIN_AVAILABLE = False
+    RecursiveCharacterTextSplitter = None
+
 
 def tokenize(
     text: str, use_tiktoken: bool = False, model: str = "gpt-3.5-turbo"
@@ -128,6 +136,57 @@ def paragraph_chunks(text: str) -> List[Dict]:
     return chunks
 
 
+def recursive_character_chunks(
+    text: str,
+    chunk_size: int = 200,
+    overlap: int = 50,
+    use_tiktoken: bool = False,
+    model: str = "gpt-3.5-turbo",
+) -> List[Dict]:
+    """Split text using LangChain's RecursiveCharacterTextSplitter.
+
+    Recursively splits by paragraphs, sentences, then words for semantic coherence.
+
+    Args:
+        text: Text to chunk
+        chunk_size: Target size per chunk (words or tokens)
+        overlap: Overlap between chunks
+        use_tiktoken: If True, use tiktoken for token-based chunking
+        model: Model name for tiktoken encoding
+
+    Returns:
+        List of chunk dictionaries with 'id' and 'text' keys
+    """
+    if not LANGCHAIN_AVAILABLE:
+        raise ImportError(
+            "LangChain is required for recursive-character strategy. "
+            "Install with: pip install rag-chunk[langchain]"
+        )
+
+    if use_tiktoken:
+        if not TIKTOKEN_AVAILABLE:
+            raise ImportError(
+                "tiktoken is required for token-based chunking. "
+                "Install with: pip install rag-chunk[tiktoken]"
+            )
+        import tiktoken
+
+        enc = tiktoken.encoding_for_model(model)
+        splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+            encoding_name=enc.name, chunk_size=chunk_size, chunk_overlap=overlap
+        )
+    else:
+        splitter = RecursiveCharacterTextSplitter(
+            chunk_size=chunk_size,
+            chunk_overlap=overlap,
+            length_function=len,
+            separators=["\n\n", "\n", ". ", " ", ""],
+        )
+
+    texts = splitter.split_text(text)
+    return [{"id": i, "text": t} for i, t in enumerate(texts)]
+
+
 STRATEGIES = {
     "fixed-size": (
         lambda text, chunk_size=200, overlap=0, use_tiktoken=False, model="gpt-3.5-turbo":
@@ -151,5 +210,15 @@ STRATEGIES = {
     "paragraph": (
         lambda text, chunk_size=0, overlap=0, use_tiktoken=False, model="gpt-3.5-turbo":
         paragraph_chunks(text)
+    ),
+    "recursive-character": (
+        lambda text, chunk_size=200, overlap=50, use_tiktoken=False, model="gpt-3.5-turbo":
+        recursive_character_chunks(
+            text,
+            chunk_size,
+            overlap,
+            use_tiktoken=use_tiktoken,
+            model=model
+        )
     ),
 }

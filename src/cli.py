@@ -107,21 +107,24 @@ def _run_strategy(text, func, strat, args):
     )
     outdir = write_chunks(chunks, strat)
 
-    avg_recall, per_questions = 0.0, []
+    metrics = {"avg_recall": 0.0, "avg_precision": 0.0, "avg_f1": 0.0}
+    per_questions = []
     questions = (
         scorer.load_test_file(args.test_file)
         if getattr(args, "test_file", None)
         else None
     )
     if questions:
-        avg_recall, per_questions = scorer.evaluate_strategy(
+        metrics, per_questions = scorer.evaluate_strategy(
             chunks, questions, args.top_k
         )
 
     return {
         "strategy": strat,
         "chunks": len(chunks),
-        "avg_recall": round(avg_recall, 4),
+        "avg_recall": round(metrics["avg_recall"], 4),
+        "avg_precision": round(metrics["avg_precision"], 4),
+        "avg_f1": round(metrics["avg_f1"], 4),
         "saved": str(outdir),
     }, per_questions
 
@@ -137,27 +140,55 @@ def _write_results(results, detail, output):
             table.add_column("strategy", style="cyan")
             table.add_column("chunks", justify="right")
             table.add_column("avg_recall", justify="right")
+            table.add_column("avg_precision", justify="right")
+            table.add_column("avg_f1", justify="right")
             table.add_column("saved")
             for r in results:
-                avg = r.get("avg_recall", 0.0)
+                recall = r.get("avg_recall", 0.0)
+                precision = r.get("avg_precision", 0.0)
+                f1 = r.get("avg_f1", 0.0)
+                
+                # Format recall with color
                 try:
-                    pct = f"{avg*100:.2f}%"
+                    recall_pct = f"{recall*100:.2f}%"
                 except (TypeError, ValueError):
-                    pct = str(avg)
-                if isinstance(avg, float):
-                    if avg >= 0.85:
+                    recall_pct = str(recall)
+                if isinstance(recall, float):
+                    if recall >= 0.85:
                         color = "green"
-                    elif avg >= 0.7:
+                    elif recall >= 0.7:
                         color = "yellow"
                     else:
                         color = "red"
-                    pct_cell = f"[{color}]{pct}[/{color}]"
+                    recall_cell = f"[{color}]{recall_pct}[/{color}]"
                 else:
-                    pct_cell = pct
+                    recall_cell = recall_pct
+                
+                # Format precision
+                precision_pct = f"{precision*100:.2f}%" if isinstance(precision, float) else str(precision)
+                
+                # Format F1 with color
+                try:
+                    f1_pct = f"{f1*100:.2f}%"
+                except (TypeError, ValueError):
+                    f1_pct = str(f1)
+                if isinstance(f1, float):
+                    if f1 >= 0.85:
+                        color = "green"
+                    elif f1 >= 0.7:
+                        color = "yellow"
+                    else:
+                        color = "red"
+                    f1_cell = f"[{color}]{f1_pct}[/{color}]"
+                else:
+                    f1_cell = f1_pct
+                
                 table.add_row(
                     str(r.get("strategy", "")),
                     str(r.get("chunks", "")),
-                    pct_cell,
+                    recall_cell,
+                    precision_pct,
+                    f1_cell,
                     str(r.get("saved", "")),
                 )
             console.print(table)
@@ -172,9 +203,11 @@ def _write_results(results, detail, output):
         wpath = Path("analysis_results.csv")
         with wpath.open("w", newline="", encoding="utf-8") as f:
             w = csv.writer(f)
-            w.writerow(["strategy", "chunks", "avg_recall", "saved"])
+            w.writerow(["strategy", "chunks", "avg_recall", "avg_precision", 
+                       "avg_f1", "saved"])
             for r in results:
-                w.writerow([r["strategy"], r["chunks"], r["avg_recall"], r["saved"]])
+                w.writerow([r["strategy"], r["chunks"], r["avg_recall"], 
+                           r["avg_precision"], r["avg_f1"], r["saved"]])
         print(str(wpath))
         return
     print("Unsupported output format")
@@ -191,7 +224,8 @@ def build_parser():
         "--strategy",
         type=str,
         default="fixed-size",
-        choices=["fixed-size", "sliding-window", "paragraph", "all"],
+        choices=["fixed-size", "sliding-window", "paragraph", 
+                 "recursive-character", "all"],
         help="Chunking strategy or all",
     )
     analyze_p.add_argument(

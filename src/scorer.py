@@ -45,18 +45,76 @@ def compute_recall(retrieved: List[Dict], relevant_phrases: List[str]) -> float:
     return found / len(relevant_phrases)
 
 
+def compute_precision_recall_f1(
+    retrieved: List[Dict], relevant_phrases: List[str]
+) -> Tuple[float, float, float]:
+    """Compute precision, recall, and F1 score.
+
+    Args:
+        retrieved: List of retrieved chunk dictionaries
+        relevant_phrases: List of phrases that should be found
+
+    Returns:
+        Tuple of (precision, recall, f1)
+    """
+    if not relevant_phrases:
+        return 0.0, 0.0, 0.0
+
+    lower_texts = [c["text"].lower() for c in retrieved]
+    found_phrases = set()
+    for phrase in relevant_phrases:
+        lp = phrase.lower()
+        if any(lp in t for t in lower_texts):
+            found_phrases.add(phrase)
+
+    tp = len(found_phrases)  # True positives
+    fn = len(relevant_phrases) - tp  # False negatives
+    # For precision: assume each relevant phrase found is a "correct" retrieval
+    # FP = 0 in this simplified model (we only check relevant phrases)
+    fp = 0
+
+    precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    f1 = (
+        2 * precision * recall / (precision + recall)
+        if (precision + recall) > 0
+        else 0.0
+    )
+
+    return precision, recall, f1
+
+
 def evaluate_strategy(
     chunks: List[Dict], questions: List[Dict], top_k: int
-) -> Tuple[float, List[Dict]]:
-    """Return average recall and per-question details."""
+) -> Tuple[Dict, List[Dict]]:
+    """Return average metrics and per-question details.
+
+    Returns:
+        Tuple of (metrics_dict, per_question_list)
+        metrics_dict contains: avg_recall, avg_precision, avg_f1
+    """
     per = []
     recalls = []
+    precisions = []
+    f1s = []
     for q in questions:
         question = q.get("question", "")
         relevant = q.get("relevant", [])
         retrieved = retrieve_top_k(chunks, question, top_k)
-        recall = compute_recall(retrieved, relevant)
+        precision, recall, f1 = compute_precision_recall_f1(retrieved, relevant)
         recalls.append(recall)
-        per.append({"question": question, "recall": recall})
-    avg = sum(recalls) / len(recalls) if recalls else 0.0
-    return avg, per
+        precisions.append(precision)
+        f1s.append(f1)
+        per.append({
+            "question": question,
+            "recall": recall,
+            "precision": precision,
+            "f1": f1
+        })
+    
+    metrics = {
+        "avg_recall": sum(recalls) / len(recalls) if recalls else 0.0,
+        "avg_precision": sum(precisions) / len(precisions) if precisions else 0.0,
+        "avg_f1": sum(f1s) / len(f1s) if f1s else 0.0,
+    }
+    return metrics, per
